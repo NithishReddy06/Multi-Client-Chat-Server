@@ -1,8 +1,25 @@
 # Multi Client Chat Server
 
-A simple Computer Networks project using Python TCP sockets and multithreading. Multiple clients can connect to one server, choose usernames, and exchange messages.
+A simple Computer Networks project using Python TCP sockets and multithreading. The first review milestone covers the basic client-server connection, username input, and threaded message communication.
 
-## Features
+## Review-I Status: 30%
+
+Completed for the first review:
+
+- TCP server and client structure
+- Server listening on `127.0.0.1:5555`
+- Client connection and username input
+- Separate thread for receiving messages
+- Basic text message sending and receiving
+
+Planned for later reviews:
+
+- Full multi-client broadcast testing
+- Detailed test report and screenshots
+- Architecture and data-flow diagrams
+- Optional GUI, database, encryption, and private messaging
+
+## Current Features
 
 - TCP communication using `socket.AF_INET` and `socket.SOCK_STREAM`
 - Server address: `127.0.0.1:5555`
