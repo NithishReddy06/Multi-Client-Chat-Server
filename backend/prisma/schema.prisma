@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String           @id @default(cuid())
+  username     String           @unique
+  passwordHash String
+  createdAt    DateTime         @default(now())
+  messages     Message[]
+  memberships  RoomMembership[]
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  csrfToken String
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Room {
+  id          String           @id @default(cuid())
+  roomName    String           @unique
+  createdAt   DateTime         @default(now())
+  messages    Message[]
+  memberships RoomMembership[]
+}
+
+model RoomMembership {
+  id       String   @id @default(cuid())
+  userId   String
+  roomId   String
+  joinedAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room     Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roomId])
+  @@index([roomId])
+}
+
+model Message {
+  id                String   @id @default(cuid())
+  senderId          String?
+  senderDisplayName String
+  roomId            String
+  messageText       String   @db.VarChar(2000)
+  createdAt         DateTime @default(now())
+  sender            User?    @relation(fields: [senderId], references: [id], onDelete: SetNull)
+  room              Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([roomId, createdAt, id])
+  @@index([senderId])
+}
